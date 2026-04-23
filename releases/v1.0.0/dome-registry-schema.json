@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/BioComputingUP/dome-schema/releases/v1.0.0/dome-registry-schema.json",
+  "title": "DOME Registry Entry Schema",
+  "description": "JSON Schema for a DOME Registry entry, capturing Data, Optimisation, Model, and Evaluation information for supervised machine learning methods in biology. Version 1.0.0.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Entry-level metadata for the DOME Registry record.",
+      "properties": {
+        "dome_version": {
+          "type": "string",
+          "description": "The version of the DOME schema this entry conforms to.",
+          "const": "1.0.0"
+        },
+        "entry_id": {
+          "type": "string",
+          "description": "Unique identifier for this DOME Registry entry."
+        },
+        "created": {
+          "type": "string",
+          "format": "date",
+          "description": "Date the entry was first created (YYYY-MM-DD)."
+        },
+        "modified": {
+          "type": "string",
+          "format": "date",
+          "description": "Date the entry was last modified (YYYY-MM-DD)."
+        },
+        "source": {
+          "type": "string",
+          "enum": ["manual", "automated", "dome_copilot"],
+          "description": "How the entry was generated: manually by authors, via automated pipeline, or via DOME Copilot."
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "description": "D — Information about the training and test data used for the method.",
+      "properties": {}
+    },
+    "optimisation": {
+      "type": "object",
+      "description": "O — Information about the optimisation strategy and training procedure.",
+      "properties": {}
+    },
+    "model": {
+      "type": "object",
+      "description": "M — Information about the model architecture, type, and parameters.",
+      "properties": {}
+    },
+    "evaluation": {
+      "type": "object",
+      "description": "E — Information about model evaluation metrics, protocols, and benchmarks.",
+      "properties": {}
+    }
+  },
+  "additionalProperties": false
+}

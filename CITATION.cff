@@ -1,0 +1,113 @@
+cff-version: 1.2.0
+message: "If you use or reference this schema in your work, please cite the following paper."
+title: "dome-schema"
+abstract: "The official versioned JSON schema for the DOME Registry, providing a structured and community-maintained data model for reporting supervised machine learning methods in biology."
+type: software
+license: CC-BY-4.0
+repository-code: "https://github.com/BioComputingUP/dome-schema"
+keywords:
+  - DOME
+  - machine learning
+  - schema
+  - metadata
+  - FAIR
+  - ELIXIR
+  - bioinformatics
+  - AI reproducibility
+authors:
+  - family-names: Attafi
+    given-names: Omar
+    affiliation: BioComputingUP, University of Padova, Italy
+  - family-names: Clementel
+    given-names: Davide
+    affiliation: BioComputingUP, University of Padova, Italy
+  - family-names: Kyritsis
+    given-names: Konstantinos
+  - family-names: Capriotti
+    given-names: Emidio
+  - family-names: Farrell
+    given-names: Gavin
+    affiliation: BioComputingUP, University of Padova, Italy
+    orcid: "https://orcid.org/0000-0002-0558-8337"
+  - family-names: Fragkouli
+    given-names: Styliani-Christina
+  - family-names: Castro
+    given-names: Leyla Jael
+  - family-names: Hatos
+    given-names: András
+  - family-names: Lenaerts
+    given-names: Tom
+  - family-names: Mazurenko
+    given-names: Stanislav
+  - family-names: Mozaffari
+    given-names: Sara
+  - family-names: Pradelli
+    given-names: Filippo
+  - family-names: Ruch
+    given-names: Patrick
+  - family-names: Savojardo
+    given-names: Castrense
+  - family-names: Turina
+    given-names: Paola
+  - family-names: Zambelli
+    given-names: Federico
+  - family-names: Piovesan
+    given-names: Damiano
+  - family-names: Monzon
+    given-names: Alexander Miguel
+  - family-names: Psomopoulos
+    given-names: Fotis
+  - family-names: Tosatto
+    given-names: Silvio C.E.
+    affiliation: BioComputingUP, University of Padova, Italy
+
+preferred-citation:
+  type: article
+  title: "DOME Registry: implementing community-wide recommendations for reporting supervised machine learning in biology"
+  authors:
+    - family-names: Attafi
+      given-names: Omar
+    - family-names: Clementel
+      given-names: Davide
+    - family-names: Kyritsis
+      given-names: Konstantinos
+    - family-names: Capriotti
+      given-names: Emidio
+    - family-names: Farrell
+      given-names: Gavin
+    - family-names: Fragkouli
+      given-names: Styliani-Christina
+    - family-names: Castro
+      given-names: Leyla Jael
+    - family-names: Hatos
+      given-names: András
+    - family-names: Lenaerts
+      given-names: Tom
+    - family-names: Mazurenko
+      given-names: Stanislav
+    - family-names: Mozaffari
+      given-names: Sara
+    - family-names: Pradelli
+      given-names: Filippo
+    - family-names: Ruch
+      given-names: Patrick
+    - family-names: Savojardo
+      given-names: Castrense
+    - family-names: Turina
+      given-names: Paola
+    - family-names: Zambelli
+      given-names: Federico
+    - family-names: Piovesan
+      given-names: Damiano
+    - family-names: Monzon
+      given-names: Alexander Miguel
+    - family-names: Psomopoulos
+      given-names: Fotis
+    - family-names: Tosatto
+      given-names: Silvio C.E.
+  journal: "GigaScience"
+  year: 2024
+  volume: 13
+  article-id: "giae094"
+  doi: "10.1093/gigascience/giae094"
+  url: "https://doi.org/10.1093/gigascience/giae094"
