@@ -1,0 +1,48 @@
+{
+  "uuid": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+  "shortid": "nc0mpl1ant",
+  "public": true,
+  "isAiGenerated": false,
+  "tags": ["protein", "sequence-based"],
+
+  "publication": {
+    "title": "IncompleteNet: a model with missing DOME documentation.",
+    "authors": "Missing A, Incomplete B.",
+    "journal": "Bioinformatics",
+    "year": "2023",
+    "doi": "10.1093/bioinformatics/incomplete000"
+  },
+
+  "dataset": {
+    "availability": "Yes. Data are available on request.",
+    "provenance": "",
+    "redundancy": "",
+    "splits": "Random 80/20 split."
+  },
+
+  "optimization": {
+    "algorithm": "Neural network.",
+    "features": "",
+    "encoding": "",
+    "config": "",
+    "parameters": "",
+    "fitting": "",
+    "regularization": "Dropout.",
+    "meta": ""
+  },
+
+  "model": {
+    "availability": "",
+    "interpretability": "",
+    "output": "Binary classification.",
+    "duration": ""
+  },
+
+  "evaluation": {
+    "availability": "",
+    "measure": "AUROC.",
+    "method": "",
+    "comparison": "",
+    "confidence": ""
+  }
+}

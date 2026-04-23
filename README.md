@@ -28,6 +28,13 @@ dome-schema/
 │       ├── dome-registry-user-template.json   # Blank user account template
 │       ├── dome-registry-user-annotated.json  # Annotated user guide — field-by-field descriptions
 │       └── dome-registry-user-example.json    # Fictionalised user account example (no real PII)
+├── validator/
+│   ├── Dockerfile                             # Docker image for the DOME validator (only supported runtime)
+│   ├── requirements.txt                       # Python dependencies (used by Dockerfile)
+│   ├── validate.py                            # Validator script — run via Docker, not directly
+│   └── examples/
+│       ├── compliant-entry-v1.0.0.json        # Fully completed entry — validates as COMPLIANT (21/21)
+│       └── non-compliant-entry-v1.0.0.json    # Incomplete entry — validates as NON-COMPLIANT (6/21)
 ├── CITATION.cff                               # Citation metadata
 ├── CODE_OF_CONDUCT.md                         # Community code of conduct
 ├── CONTRIBUTING.md                            # How to contribute
@@ -116,6 +123,83 @@ For questions, feedback, or general enquiries about the DOME schema, please cont
 ## Related Resources
 
 - DOME Registry application and codebase: [https://github.com/BioComputingUP/dome-registry](https://github.com/BioComputingUP/dome-registry)
+
+---
+
+## Validator
+
+This repository includes a command-line validator for checking DOME Registry JSON files (entries and user accounts) against a chosen schema version. The validator is packaged as a Docker image — this is the only supported runtime.
+
+### Build the Docker image
+
+Run from the repository root (both `releases/` and `validator/` must be available as build context):
+
+```bash
+docker build -t dome-validator -f validator/Dockerfile .
+```
+
+### Run the validator
+
+Mount a directory containing your JSON file(s) at `/data` inside the container and pass the required arguments.
+
+**Validate a DOME Registry entry:**
+
+```bash
+docker run --rm -v "$(pwd)/validator/examples:/data" dome-validator \
+  --schema-type entry \
+  --schema-version v1.0.0 \
+  --file /data/compliant-entry-v1.0.0.json
+```
+
+**Validate a user account file:**
+
+```bash
+docker run --rm -v "/path/to/your/files:/data" dome-validator \
+  --schema-type user \
+  --schema-version v1.0.0 \
+  --file /data/my-user.json
+```
+
+**List available schema versions:**
+
+```bash
+docker run --rm dome-validator --list-versions
+```
+
+### Output
+
+The validator prints a per-field report and a summary result:
+
+```
+DOME Registry Validator
+────────────────────────────────────────────────────
+Schema type   : entry
+Schema version: v1.0.0
+File          : /data/compliant-entry-v1.0.0.json
+────────────────────────────────────────────────────
+
+Section: dataset
+  [✓] availability
+  [✓] provenance
+  ...
+
+────────────────────────────────────────────────────
+Result: COMPLIANT
+  Structural errors   : 0
+  Completeness issues : 0 field(s) absent or empty
+────────────────────────────────────────────────────
+```
+
+The process exits with code `0` (COMPLIANT) or `1` (NON-COMPLIANT), making it straightforward to use in CI pipelines.
+
+### Example files
+
+Two example entry files are provided in [`validator/examples/`](./validator/examples/) for testing and reference:
+
+| File | Expected result | DOME score |
+|---|---|---|
+| `compliant-entry-v1.0.0.json` | COMPLIANT | 21/21 |
+| `non-compliant-entry-v1.0.0.json` | NON-COMPLIANT | 6/21 |
 
 ---
 
