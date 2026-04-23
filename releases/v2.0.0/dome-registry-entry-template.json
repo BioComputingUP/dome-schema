@@ -1,0 +1,122 @@
+{
+  "_comment": "DOME Registry entry template — v2.0.0. Fill all fields below. Fields marked [SYSTEM] are assigned by the Registry and should be omitted when submitting a new entry. In v2.0.0, each of the 21 DOME content fields (D1–D4, O1–O8, M1–M4, E1–E5) is represented as a structured object with typed sub-fields (Boolean, Number, String, Array) rather than a free-text string. See dome-registry-entry-annotated.json for field-by-field guidance.",
+  "x-dome-schema-version": "2.0.0",
+
+  "publication": {
+    "title": "",
+    "authors": "",
+    "journal": "",
+    "year": "",
+    "doi": "",
+    "pmid": "",
+    "pmcid": "",
+    "tags": []
+  },
+
+  "public": true,
+  "isAiGenerated": false,
+  "tags": [],
+
+  "data": {
+    "availability": {
+      "isPub": null,
+      "licence": "",
+      "enfMeth": ""
+    },
+    "provenance": {
+      "source": "",
+      "numDP": null,
+      "prevUse": null
+    },
+    "redundancy": {
+      "splitMeth": "",
+      "isIndep": null,
+      "enfMeth": "",
+      "distCmp": ""
+    },
+    "splits": {
+      "numSplits": null,
+      "dpPerSplit": [],
+      "otherSplits": "",
+      "splitDist": ""
+    }
+  },
+
+  "optimization": {
+    "algorithm": {
+      "algName": "",
+      "isNewAlg": null,
+      "unpubRsn": ""
+    },
+    "config": {
+      "cfgAvail": null,
+      "lic": ""
+    },
+    "encoding": {
+      "encMeth": ""
+    },
+    "features": {
+      "numF": null,
+      "featSel": null,
+      "trnOnlySel": null
+    },
+    "fit": {
+      "pGtN": null,
+      "noOverFit": "",
+      "noUnderFit": ""
+    },
+    "meta": {
+      "isMeta": null,
+      "metaMeths": [],
+      "metaIndep": null
+    },
+    "parameters": {
+      "numP": null,
+      "pSelMeth": ""
+    },
+    "regularisation": {
+      "hasReg": null,
+      "regTechs": []
+    }
+  },
+
+  "model": {
+    "availability": {
+      "srcAvail": null,
+      "exeAvail": null,
+      "lic": ""
+    },
+    "duration": {
+      "runTime": ""
+    },
+    "interpretability": {
+      "interpType": "",
+      "transpEx": ""
+    },
+    "output": {
+      "outType": ""
+    }
+  },
+
+  "evaluation": {
+    "method": {
+      "evalMeth": ""
+    },
+    "availability": {
+      "rawAvail": null,
+      "lic": ""
+    },
+    "comparison": {
+      "cmpPub": null,
+      "cmpBase": null
+    },
+    "confidance": {
+      "hasCI": null,
+      "isStatSig": null
+    },
+    "measure": {
+      "metrics": [],
+      "isRep": null
+    }
+  }
+}

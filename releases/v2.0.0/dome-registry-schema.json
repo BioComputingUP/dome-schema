@@ -1,0 +1,336 @@
+{
+  "$id": "https://github.com/BioComputingUP/dome-schema/blob/main/releases/v2.0.0/dome-registry-schema.json",
+  "title": "DOME Registry Entry Schema",
+  "description": "JSON Schema for a DOME Registry entry, implementing the DOME Recommendations (Data, Optimisation, Model, Evaluation) for supervised machine learning methods in biology. This is the canonical schema for version 2.0.0. In v2.0.0 each of the 21 top-level DOME content fields is decomposed into typed structured sub-fields (Boolean, Number, String, Array) rather than free-text strings, enabling programmatic validation and automated compliance scoring. The 21 DOME fields span four sections: data (4), optimization (8), model (4), evaluation (5). Additional fields cover publication metadata and system/provenance tracking.",
+  "x-dome-schema-version": "2.0.0",
+  "type": "object",
+  "required": ["data", "optimization", "model", "evaluation", "publication"],
+  "properties": {
+
+    "_id": {
+      "type": "object",
+      "description": "[SYSTEM] MongoDB document identifier. Generated server-side; omit when submitting a new entry.",
+      "properties": {
+        "$oid": { "type": "string" }
+      }
+    },
+    "uuid": {
+      "type": "string",
+      "description": "[SYSTEM] RFC-4122 UUID assigned by the Registry on entry creation.",
+      "format": "uuid"
+    },
+    "shortid": {
+      "type": "string",
+      "description": "[SYSTEM] Short human-readable alphanumeric identifier used in Registry URLs."
+    },
+    "__v": {
+      "type": "integer",
+      "description": "[SYSTEM] MongoDB internal version key."
+    },
+    "update": {
+      "type": "integer",
+      "description": "[SYSTEM] Number of times this entry has been updated since creation.",
+      "minimum": 0
+    },
+    "score": {
+      "type": "integer",
+      "description": "[SYSTEM] Computed completeness score (0–21): one point per top-level DOME content field completed. Fields are distributed as data (4), optimization (8), model (4), evaluation (5).",
+      "minimum": 0,
+      "maximum": 21
+    },
+    "reviewState": {
+      "type": "string",
+      "description": "[SYSTEM] Registry-internal curation state of the entry."
+    },
+    "public": {
+      "type": "boolean",
+      "description": "Whether this entry is publicly visible in the DOME Registry."
+    },
+    "isAiGenerated": {
+      "type": ["boolean", "null"],
+      "description": "True if this entry was generated automatically (e.g. by DOME Copilot); false if completed manually by a human annotator."
+    },
+    "tags": {
+      "type": "array",
+      "description": "Free-text tags for categorising or filtering entries.",
+      "items": { "type": "string" }
+    },
+    "created": {
+      "type": "object",
+      "description": "[SYSTEM] Timestamp of entry creation (MongoDB extended JSON date).",
+      "properties": {
+        "$date": { "type": "string", "format": "date-time" }
+      }
+    },
+    "updated": {
+      "type": "object",
+      "description": "[SYSTEM] Timestamp of last update (MongoDB extended JSON date).",
+      "properties": {
+        "$date": { "type": "string", "format": "date-time" }
+      }
+    },
+    "user": {
+      "type": "object",
+      "description": "[SYSTEM] Reference to the Registry user account that owns this entry.",
+      "properties": {
+        "$oid": { "type": "string" }
+      }
+    },
+
+    "publication": {
+      "type": "object",
+      "description": "Bibliographic metadata for the publication this DOME entry describes.",
+      "properties": {
+        "title":   { "type": "string", "description": "Full title of the publication." },
+        "authors": { "type": "string", "description": "Author list as a single string (e.g. 'Smith A, Jones B, ...')." },
+        "journal": { "type": "string", "description": "Journal or conference name." },
+        "year":    { "type": "string", "description": "Publication year (YYYY)." },
+        "doi":     { "type": "string", "description": "Digital Object Identifier (e.g. '10.1038/s41592-021-01205-4')." },
+        "pmid":    { "type": "string", "description": "PubMed ID, if available." },
+        "pmcid":   { "type": "string", "description": "PubMed Central ID, if available." },
+        "tags":    { "type": "array", "items": { "type": "string" }, "description": "Publication-level tags." },
+        "done":    { "type": "integer", "description": "[SYSTEM] Number of publication metadata fields completed." },
+        "skip":    { "type": "integer", "description": "[SYSTEM] Number of publication metadata fields skipped." },
+        "updated": { "type": "string", "description": "[SYSTEM] Timestamp of last publication metadata update (MM/DD/YYYY HH:MM:SS)." },
+        "created": { "type": "string", "description": "[SYSTEM] Timestamp of publication record creation." }
+      }
+    },
+
+    "data": {
+      "type": "object",
+      "description": "D — Data: Structured information about the training and test datasets used for the method.",
+      "properties": {
+
+        "availability": {
+          "type": "object",
+          "description": "[D1] Public availability of the dataset.",
+          "properties": {
+            "isPub":   { "type": ["boolean", "null"], "description": "True if the dataset is publicly available." },
+            "licence": { "type": "string",            "description": "Licence under which the dataset is released (e.g. CC BY 4.0)." },
+            "enfMeth": { "type": "string",            "description": "Method or URL used to enforce or verify access (e.g. repository URL, access portal)." }
+          }
+        },
+
+        "provenance": {
+          "type": "object",
+          "description": "[D2] Origin and composition of the dataset.",
+          "properties": {
+            "source":  { "type": "string",            "description": "Source database(s) or study from which the dataset was derived." },
+            "numDP":   { "type": ["number", "null"],  "description": "Total number of data points (samples) in the dataset." },
+            "prevUse": { "type": ["boolean", "null"], "description": "True if the dataset has been used in prior published work." }
+          }
+        },
+
+        "redundancy": {
+          "type": "object",
+          "description": "[D3] Redundancy assessment and reduction in the dataset.",
+          "properties": {
+            "splitMeth": { "type": "string",            "description": "Method used to detect or measure redundancy (e.g. cd-hit, BLAST)." },
+            "isIndep":   { "type": ["boolean", "null"], "description": "True if training and test sets are guaranteed to be independent (non-redundant)." },
+            "enfMeth":   { "type": "string",            "description": "Method or threshold used to enforce independence (e.g. 30% sequence identity cutoff)." },
+            "distCmp":   { "type": "string",            "description": "Distance or similarity comparison approach used (e.g. pairwise sequence identity, structural RMSD)." }
+          }
+        },
+
+        "splits": {
+          "type": "object",
+          "description": "[D4] Data partitioning strategy for training, validation, and test sets.",
+          "properties": {
+            "numSplits":   { "type": ["number", "null"], "description": "Number of distinct data splits (e.g. 5 for 5-fold cross-validation, 3 for train/val/test)." },
+            "dpPerSplit":  { "type": "array",            "description": "Number of data points in each split, ordered by split index.", "items": { "type": "number" } },
+            "otherSplits": { "type": "string",            "description": "Description of any non-standard or additional splits applied." },
+            "splitDist":   { "type": "string",            "description": "Distribution strategy used (e.g. stratified random sampling, time-based split, clustering-based)." }
+          }
+        },
+
+        "done": { "type": "integer", "description": "[SYSTEM] Number of data fields completed (0–4)." },
+        "skip": { "type": "integer", "description": "[SYSTEM] Number of data fields skipped (0–4)." }
+      }
+    },
+
+    "optimization": {
+      "type": "object",
+      "description": "O — Optimisation: Structured information about the training procedure, hyperparameter tuning, and feature engineering.",
+      "properties": {
+
+        "algorithm": {
+          "type": "object",
+          "description": "[O1] Machine learning algorithm(s) used.",
+          "properties": {
+            "algName":  { "type": "string",            "description": "Name and type of the ML algorithm(s) used (e.g. 'Random Forest', 'LSTM', 'SVM with RBF kernel')." },
+            "isNewAlg": { "type": ["boolean", "null"], "description": "True if the algorithm is novel or not previously published." },
+            "unpubRsn": { "type": "string",            "description": "If the algorithm is novel and not yet published, state the reason or context." }
+          }
+        },
+
+        "config": {
+          "type": "object",
+          "description": "[O4] Hyperparameter configuration availability.",
+          "properties": {
+            "cfgAvail": { "type": ["boolean", "null"], "description": "True if the final hyperparameter configuration is reported in the paper." },
+            "lic":      { "type": "string",            "description": "Licence under which the configuration or associated code is released." }
+          }
+        },
+
+        "encoding": {
+          "type": "object",
+          "description": "[O3] Input data encoding or representation.",
+          "properties": {
+            "encMeth": { "type": "string", "description": "Method used to encode raw input data as numerical vectors (e.g. one-hot, PSSM, embeddings, graph adjacency matrix)." }
+          }
+        },
+
+        "features": {
+          "type": "object",
+          "description": "[O2] Input features used by the model.",
+          "properties": {
+            "numF":       { "type": ["number", "null"],  "description": "Total number of input features (dimensionality of the feature vector)." },
+            "featSel":    { "type": ["boolean", "null"], "description": "True if a feature selection step was performed." },
+            "trnOnlySel": { "type": ["boolean", "null"], "description": "True if feature selection was performed exclusively on the training set (to avoid data leakage)." }
+          }
+        },
+
+        "fit": {
+          "type": "object",
+          "description": "[O6] Overfitting and underfitting assessment.",
+          "properties": {
+            "pGtN":       { "type": ["boolean", "null"], "description": "True if the number of model parameters exceeds the number of training data points (potential overfitting risk)." },
+            "noOverFit":  { "type": "string",            "description": "Evidence or argument that overfitting was not present or was mitigated." },
+            "noUnderFit": { "type": "string",            "description": "Evidence or argument that underfitting was not present." }
+          }
+        },
+
+        "meta": {
+          "type": "object",
+          "description": "[O8] Meta-learning or ensemble strategy.",
+          "properties": {
+            "isMeta":    { "type": ["boolean", "null"], "description": "True if a meta-learning or ensemble approach was used." },
+            "metaMeths": { "type": "array",             "description": "List of ensemble or meta-learning methods used (e.g. ['bagging', 'stacking']).", "items": { "type": "string" } },
+            "metaIndep": { "type": ["boolean", "null"], "description": "True if the component models or base learners are trained independently of each other." }
+          }
+        },
+
+        "parameters": {
+          "type": "object",
+          "description": "[O5] Model parameter reporting.",
+          "properties": {
+            "numP":     { "type": ["number", "null"], "description": "Number of free or learnable parameters in the model." },
+            "pSelMeth": { "type": "string",           "description": "Method used to select or tune the model parameters (e.g. grid search, Bayesian optimisation, manual tuning)." }
+          }
+        },
+
+        "regularisation": {
+          "type": "object",
+          "description": "[O7] Regularisation techniques applied during training.",
+          "properties": {
+            "hasReg":   { "type": ["boolean", "null"], "description": "True if any regularisation technique was applied." },
+            "regTechs": { "type": "array",             "description": "List of regularisation techniques used (e.g. ['L2', 'dropout', 'early stopping']).", "items": { "type": "string" } }
+          }
+        },
+
+        "done": { "type": "integer", "description": "[SYSTEM] Number of optimization fields completed (0–8)." },
+        "skip": { "type": "integer", "description": "[SYSTEM] Number of optimization fields skipped (0–8)." }
+      }
+    },
+
+    "model": {
+      "type": "object",
+      "description": "M — Model: Structured information about the model architecture, outputs, and availability.",
+      "properties": {
+
+        "availability": {
+          "type": "object",
+          "description": "[M1] Availability of the trained model.",
+          "properties": {
+            "srcAvail": { "type": ["boolean", "null"], "description": "True if the model source code is publicly available." },
+            "exeAvail": { "type": ["boolean", "null"], "description": "True if a trained executable model, weights, or web service is publicly available." },
+            "lic":      { "type": "string",            "description": "Licence under which the model or code is released (e.g. MIT, GPL-3.0, Apache 2.0)." }
+          }
+        },
+
+        "duration": {
+          "type": "object",
+          "description": "[M4] Computational cost and runtime.",
+          "properties": {
+            "runTime": { "type": "string", "description": "Reported training or inference duration and hardware context (e.g. '12 min on Intel Xeon CPU', '2 h on NVIDIA A100 GPU')." }
+          }
+        },
+
+        "interpretability": {
+          "type": "object",
+          "description": "[M2] Model interpretability characterisation.",
+          "properties": {
+            "interpType": { "type": "string", "description": "Interpretability class: 'transparent', 'black box', or 'post-hoc explainable'." },
+            "transpEx":   { "type": "string", "description": "Description of the transparency or explanation approach used (e.g. feature importance, SHAP, attention weights)." }
+          }
+        },
+
+        "output": {
+          "type": "object",
+          "description": "[M3] Model output type and format.",
+          "properties": {
+            "outType": { "type": "string", "description": "Output type and format (e.g. 'binary classification', 'regression score in kcal/mol', 'multi-class probability distribution')." }
+          }
+        },
+
+        "done": { "type": "integer", "description": "[SYSTEM] Number of model fields completed (0–4)." },
+        "skip": { "type": "integer", "description": "[SYSTEM] Number of model fields skipped (0–4)." }
+      }
+    },
+
+    "evaluation": {
+      "type": "object",
+      "description": "E — Evaluation: Structured information about performance assessment, metrics, and comparison to baselines.",
+      "properties": {
+
+        "method": {
+          "type": "object",
+          "description": "[E3] Evaluation protocol.",
+          "properties": {
+            "evalMeth": { "type": "string", "description": "Evaluation protocol used (e.g. '5-fold stratified cross-validation', 'independent held-out test set', 'leave-one-out')." }
+          }
+        },
+
+        "availability": {
+          "type": "object",
+          "description": "[E1] Availability of evaluation results.",
+          "properties": {
+            "rawAvail": { "type": ["boolean", "null"], "description": "True if raw evaluation results or code to reproduce them are publicly available." },
+            "lic":      { "type": "string",            "description": "Licence under which the evaluation results or code are released." }
+          }
+        },
+
+        "comparison": {
+          "type": "object",
+          "description": "[E4] Comparison to baselines or prior methods.",
+          "properties": {
+            "cmpPub":  { "type": ["boolean", "null"], "description": "True if the method is compared to previously published state-of-the-art methods." },
+            "cmpBase": { "type": ["boolean", "null"], "description": "True if the method is compared to a naive or majority-class baseline." }
+          }
+        },
+
+        "confidance": {
+          "type": "object",
+          "description": "[E5] Statistical confidence and significance reporting.",
+          "properties": {
+            "hasCI":     { "type": ["boolean", "null"], "description": "True if confidence intervals or uncertainty estimates are reported." },
+            "isStatSig": { "type": ["boolean", "null"], "description": "True if statistical significance testing was performed and results are reported." }
+          }
+        },
+
+        "measure": {
+          "type": "object",
+          "description": "[E2] Performance metrics used.",
+          "properties": {
+            "metrics": { "type": "array",             "description": "List of performance metrics reported (e.g. ['AUROC', 'MCC', 'F1']).", "items": { "type": "string" } },
+            "isRep":   { "type": ["boolean", "null"], "description": "True if the evaluation is fully reproducible (all code, data, and instructions are available)." }
+          }
+        },
+
+        "done": { "type": "integer", "description": "[SYSTEM] Number of evaluation fields completed (0–5)." },
+        "skip": { "type": "integer", "description": "[SYSTEM] Number of evaluation fields skipped (0–5)." }
+      }
+    }
+
+  }
+}

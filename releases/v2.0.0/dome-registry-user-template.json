@@ -1,0 +1,12 @@
+{
+  "_comment": "DOME Registry user account template — v1.0.0. Fill the fields below to describe a user account record. Fields marked [SYSTEM] are assigned server-side and should be omitted when creating a new account. Fields marked [PII] contain personally identifiable information and must be handled in accordance with applicable data protection regulations. See dome-registry-user-annotated.json for field-by-field guidance.",
+  "x-dome-schema-version": "1.0.0",
+
+  "email": "",
+  "name": "",
+  "surname": "",
+  "orcid": "",
+  "roles": "user",
+  "organisation": "undefined",
+  "organizations": []
+}

@@ -1,0 +1,168 @@
+{
+  "_comment": "DOME Registry annotated guide — v2.0.0. This file documents what each field should contain. In v2.0.0, all DOME content fields (D1–D4, O1–O8, M1–M4, E1–E5) are structured objects with typed sub-fields; sub-field values here are descriptive prompts, NOT example data. Use dome-registry-entry-template.json to create a blank submission, and dome-registry-entry-example.json to see a filled example. Fields marked [SYSTEM] are assigned server-side and should be omitted from new submissions.",
+  "x-dome-schema-version": "2.0.0",
+
+  "publication": {
+    "title":   "[Required] Full title of the publication exactly as it appears in the journal or preprint.",
+    "authors": "[Required] Author list as a single string, e.g. 'Smith A, Jones B, Müller C.'",
+    "journal": "[Required] Name of the journal, conference, or preprint server.",
+    "year":    "[Required] Four-digit publication year, e.g. '2024'.",
+    "doi":     "[Recommended] DOI without the 'https://doi.org/' prefix, e.g. '10.1038/s41592-021-01205-4'.",
+    "pmid":    "[Optional] PubMed identifier, if indexed, e.g. '34289022'.",
+    "pmcid":   "[Optional] PubMed Central identifier, if available, e.g. 'PMC8513558'.",
+    "tags":    "[Optional] Array of free-text tags for the publication, e.g. ['protein', 'cancer', 'NLP']."
+  },
+
+  "public":        "[Required] Boolean. Set to true to make this entry visible in the public DOME Registry.",
+  "isAiGenerated": "[Required] Boolean. Set to true if this entry was generated automatically (e.g. by DOME Copilot); false if completed by a human annotator.",
+  "tags":          "[Optional] Array of free-text tags for the entry as a whole.",
+
+  "data": {
+    "_section": "D — Data (4 fields, D1–D4). Describe the datasets used to train and test the method. Each field is a structured object with typed sub-fields.",
+
+    "availability": {
+      "_field":  "[D1] Public availability of the dataset.",
+      "isPub":   "[D1.isPub] Boolean. Set to true if the dataset is publicly available, false if restricted or proprietary.",
+      "licence": "[D1.licence] The licence under which the dataset is distributed (e.g. 'CC BY 4.0', 'Proprietary', 'Not stated'). Provide 'Not stated' if no licence is declared.",
+      "enfMeth": "[D1.enfMeth] The URL, repository, or portal through which the dataset can be accessed (e.g. 'https://github.com/example-org/dataset'). State 'Not available' if access is restricted."
+    },
+
+    "provenance": {
+      "_field":  "[D2] Origin and composition of the dataset.",
+      "source":  "[D2.source] Source database(s), study, or repository from which the dataset was derived. State the version or release date if known (e.g. 'BioLiP v2023-01', 'UniProt release 2023_04').",
+      "numDP":   "[D2.numDP] Total number of data points (samples/instances) in the full dataset prior to any splitting.",
+      "prevUse": "[D2.prevUse] Boolean. Set to true if the dataset or a substantively similar benchmark has been used in prior published work. Cite relevant prior publications in the paper."
+    },
+
+    "redundancy": {
+      "_field":    "[D3] Redundancy assessment and reduction.",
+      "splitMeth": "[D3.splitMeth] Name of the tool or algorithm used to detect redundancy (e.g. 'cd-hit', 'BLAST', 'MMseqs2'). State 'Not reported' if redundancy was not assessed.",
+      "isIndep":   "[D3.isIndep] Boolean. Set to true if training and test sets are guaranteed to contain no redundant or near-identical instances.",
+      "enfMeth":   "[D3.enfMeth] The threshold or criterion used to define independence (e.g. '30% pairwise sequence identity', 'E-value < 1e-3'). State 'Not applied' if no threshold was enforced.",
+      "distCmp":   "[D3.distCmp] The distance or similarity metric used to compare instances when assessing redundancy (e.g. 'pairwise sequence identity', 'structural RMSD', 'Tanimoto coefficient')."
+    },
+
+    "splits": {
+      "_field":      "[D4] Data partitioning strategy.",
+      "numSplits":   "[D4.numSplits] Integer. The number of distinct splits defined (e.g. 5 for 5-fold CV, 3 for train/validation/test, 1 for a single train/test partition).",
+      "dpPerSplit":  "[D4.dpPerSplit] Array of integers giving the number of data points in each split, in split order (e.g. [2690, 384, 768]).",
+      "otherSplits": "[D4.otherSplits] Description of any non-standard, additional, or nested splits applied (e.g. inner CV loop for hyperparameter selection within outer CV folds). State 'None' if not applicable.",
+      "splitDist":   "[D4.splitDist] Strategy used to assign data points to splits (e.g. 'stratified random sampling maintaining class ratio', 'chronological split', 'cluster-based split to avoid homology leakage')."
+    }
+  },
+
+  "optimization": {
+    "_section": "O — Optimisation (8 fields, O1–O8). Describe the training procedure, features, and hyperparameter tuning.",
+
+    "algorithm": {
+      "_field":   "[O1] Machine learning algorithm(s) used.",
+      "algName":  "[O1.algName] Name and type of the ML algorithm(s) used (e.g. 'Random Forest classifier', 'LSTM neural network', 'Support Vector Machine with RBF kernel'). Provide a brief characterisation if the method is novel.",
+      "isNewAlg": "[O1.isNewAlg] Boolean. Set to true if the algorithm is novel and has not previously been published as a standalone method.",
+      "unpubRsn": "[O1.unpubRsn] If the algorithm is novel and unpublished, state the reason it is not yet independently published, or describe its relationship to prior work. Leave empty if isNewAlg is false."
+    },
+
+    "config": {
+      "_field":   "[O4] Hyperparameter configuration availability.",
+      "cfgAvail": "[O4.cfgAvail] Boolean. Set to true if the final hyperparameter settings (values used in the reported model) are stated in the paper or supplementary materials.",
+      "lic":      "[O4.lic] Licence under which the configuration file or associated code is released (e.g. 'MIT', 'Apache 2.0', 'Not stated'). State 'Not applicable' if no code is provided."
+    },
+
+    "encoding": {
+      "_field":  "[O3] Input data encoding.",
+      "encMeth": "[O3.encMeth] Method used to represent raw input data as numerical vectors for model input (e.g. 'one-hot encoding of amino acid sequence', 'PSSM from PSI-BLAST', 'pre-trained protein language model embeddings', 'graph Laplacian')."
+    },
+
+    "features": {
+      "_field":      "[O2] Input features used by the model.",
+      "numF":        "[O2.numF] Total number of input features (dimensionality of the feature vector presented to the model).",
+      "featSel":     "[O2.featSel] Boolean. Set to true if an explicit feature selection or dimensionality reduction step was applied.",
+      "trnOnlySel":  "[O2.trnOnlySel] Boolean. Set to true if feature selection was performed using only training-set data (i.e., no test-set information influenced feature selection, avoiding data leakage)."
+    },
+
+    "fit": {
+      "_field":      "[O6] Overfitting and underfitting assessment.",
+      "pGtN":        "[O6.pGtN] Boolean. Set to true if the number of model parameters exceeds the number of training data points, indicating a potential overfitting risk.",
+      "noOverFit":   "[O6.noOverFit] Brief statement of evidence that overfitting was not problematic (e.g. 'Training AUROC 0.97 vs test AUROC 0.83; gap consistent with RF behaviour on imbalanced data'). State 'Not assessed' if not addressed.",
+      "noUnderFit":  "[O6.noUnderFit] Brief statement of evidence that underfitting was not problematic (e.g. 'Training AUROC 0.97 rules out underfitting'). State 'Not assessed' if not addressed."
+    },
+
+    "meta": {
+      "_field":    "[O8] Meta-learning or ensemble strategy.",
+      "isMeta":    "[O8.isMeta] Boolean. Set to true if a meta-learning, ensemble, or model-combination strategy was used.",
+      "metaMeths": "[O8.metaMeths] Array of strings naming the ensemble or meta-learning methods used (e.g. ['bagging', 'stacking', 'boosting']). Leave as empty array if isMeta is false.",
+      "metaIndep": "[O8.metaIndep] Boolean. Set to true if the component models are trained independently (e.g. in bagging). Set to false if component models share information (e.g. in boosting). Leave null if isMeta is false."
+    },
+
+    "parameters": {
+      "_field":   "[O5] Model parameter reporting.",
+      "numP":     "[O5.numP] Total number of free or learnable parameters in the final trained model. State null if not reported.",
+      "pSelMeth": "[O5.pSelMeth] Method used to select or optimise parameters (e.g. 'grid search with 5-fold CV', 'Bayesian optimisation', 'manual tuning', 'default settings'). State 'Not reported' if not described."
+    },
+
+    "regularisation": {
+      "_field":   "[O7] Regularisation techniques applied.",
+      "hasReg":   "[O7.hasReg] Boolean. Set to true if any regularisation technique was applied during training.",
+      "regTechs": "[O7.regTechs] Array of regularisation technique names applied (e.g. ['L2 weight decay', 'dropout', 'early stopping', 'data augmentation']). Leave as empty array if hasReg is false."
+    }
+  },
+
+  "model": {
+    "_section": "M — Model (4 fields, M1–M4). Describe the model and its availability.",
+
+    "availability": {
+      "_field":   "[M1] Availability of the trained model.",
+      "srcAvail": "[M1.srcAvail] Boolean. Set to true if the model source code is publicly accessible (e.g. on GitHub, Zenodo, or a journal supplement).",
+      "exeAvail": "[M1.exeAvail] Boolean. Set to true if a trained model (weights, pickled model, Docker image, or web service) is publicly accessible.",
+      "lic":      "[M1.lic] Licence under which the model or code is released (e.g. 'MIT', 'GPL-3.0', 'Apache 2.0', 'Proprietary'). State 'Not stated' if no licence is declared."
+    },
+
+    "duration": {
+      "_field":  "[M4] Computational cost and runtime.",
+      "runTime": "[M4.runTime] Reported training duration and hardware context (e.g. '12 min on Intel Xeon E5-2680 CPU', '2 h on NVIDIA A100 GPU, 40 GB RAM'). State 'Not reported' if not given in the paper."
+    },
+
+    "interpretability": {
+      "_field":     "[M2] Model interpretability.",
+      "interpType": "[M2.interpType] Interpretability classification: 'transparent' (e.g. linear model, decision tree with reported coefficients), 'black box' (e.g. deep neural network without explanation), or 'post-hoc explainable' (explanation method applied after training).",
+      "transpEx":   "[M2.transpEx] Description of the transparency or post-hoc explanation approach used (e.g. 'Gini feature importances reported for all features', 'SHAP values computed for test set', 'attention weights visualised'). State 'None' if the model is a black box with no explanation."
+    },
+
+    "output": {
+      "_field":  "[M3] Model output type.",
+      "outType": "[M3.outType] Precise description of the model output (e.g. 'binary classification per residue: binding (1) / non-binding (0) with probability in [0,1]', 'regression: predicted binding affinity in kcal/mol', 'multi-class probability vector over 20 amino acid classes')."
+    }
+  },
+
+  "evaluation": {
+    "_section": "E — Evaluation (5 fields, E1–E5). Describe how model performance was assessed.",
+
+    "method": {
+      "_field":   "[E3] Evaluation protocol.",
+      "evalMeth": "[E3.evalMeth] Evaluation protocol used to assess model performance (e.g. '5-fold stratified cross-validation on training set; final performance on independent held-out test set', 'leave-one-protein-out cross-validation', 'single train/test split')."
+    },
+
+    "availability": {
+      "_field":   "[E1] Availability of evaluation results.",
+      "rawAvail": "[E1.rawAvail] Boolean. Set to true if raw prediction scores, evaluation scripts, or result files are openly available (e.g. GitHub repository, Zenodo archive).",
+      "lic":      "[E1.lic] Licence under which the evaluation data or code is released. State 'Not stated' if not declared."
+    },
+
+    "comparison": {
+      "_field":  "[E4] Comparison to baselines or prior methods.",
+      "cmpPub":  "[E4.cmpPub] Boolean. Set to true if the method is benchmarked against at least one previously published state-of-the-art method on the same test set.",
+      "cmpBase": "[E4.cmpBase] Boolean. Set to true if the method is compared to at least one naive or majority-class baseline."
+    },
+
+    "confidance": {
+      "_field":    "[E5] Statistical confidence and significance.",
+      "hasCI":     "[E5.hasCI] Boolean. Set to true if confidence intervals, standard deviations across folds, or uncertainty estimates for performance metrics are reported.",
+      "isStatSig": "[E5.isStatSig] Boolean. Set to true if formal statistical significance testing (e.g. paired t-test, Wilcoxon signed-rank test) was performed and results are reported."
+    },
+
+    "measure": {
+      "_field":  "[E2] Performance metrics.",
+      "metrics": "[E2.metrics] Array of performance metric names reported in the paper (e.g. ['AUROC', 'MCC', 'F1', 'precision', 'recall', 'accuracy']). Include all metrics mentioned.",
+      "isRep":   "[E2.isRep] Boolean. Set to true if the evaluation is fully reproducible: all code, data, and instructions required to regenerate the reported results are publicly available."
+    }
+  }
+}

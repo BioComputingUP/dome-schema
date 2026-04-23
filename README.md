@@ -19,8 +19,17 @@ As the Registry has grown and evolved — with entries being added, updated, and
 ```
 dome-schema/
 ├── releases/
-│   └── v1.0.0/
-│       ├── dome-registry-schema.json          # DOME entry schema — all 21 DOME content fields + metadata
+│   ├── v1.0.0/                                # Immutable — first stable release
+│   │   ├── dome-registry-schema.json
+│   │   ├── dome-registry-entry-template.json
+│   │   ├── dome-registry-entry-annotated.json
+│   │   ├── dome-registry-entry-example.json
+│   │   ├── dome-registry-user-schema.json
+│   │   ├── dome-registry-user-template.json
+│   │   ├── dome-registry-user-annotated.json
+│   │   └── dome-registry-user-example.json
+│   └── v2.0.0/                                # Current stable release
+│       ├── dome-registry-schema.json          # DOME entry schema — structured DOME fields + metadata
 │       ├── dome-registry-entry-template.json  # Blank entry template — copy and fill for a new entry
 │       ├── dome-registry-entry-annotated.json # Annotated entry guide — field-by-field descriptions
 │       ├── dome-registry-entry-example.json   # Fictionalised fully-completed example entry
@@ -78,7 +87,14 @@ This repository follows [Semantic Versioning (SemVer)](https://semver.org/) usin
 | **MINOR** `v1.x.0` | New optional fields added in a backward-compatible way |
 | **MAJOR** `vX.0.0` | Breaking changes: renaming/removing fields, changing types, restructuring sections |
 
-The current stable release is **[v1.0.0](https://github.com/BioComputingUP/dome-schema/blob/main/releases/v1.0.0/dome-registry-schema.json)**.
+### Release history
+
+| Version | Key changes |
+|---|---|
+| **v1.0.0** | Initial stable release. All 21 DOME content fields represented as free-text strings. |
+| **v2.0.0** | **Breaking.** All 21 DOME content fields decomposed into typed structured sub-fields (Boolean, Number, String, Array). Top-level section key renamed `dataset` → `data`. Enables programmatic validation and automated compliance scoring. User account schema files unchanged from v1.0.0. |
+
+The current stable release is **[v2.0.0](https://github.com/BioComputingUP/dome-schema/blob/main/releases/v2.0.0/dome-registry-schema.json)**.
 
 DOME Registry entries record which schema version they conform to. This ensures that even as the schema evolves, older entries remain valid and tools targeting a specific version remain stable — including those produced at scale by automated pipelines such as [DOME Copilot](https://doi.org/10.64898/2026.04.16.718888).
 
@@ -105,7 +121,7 @@ Mount a directory containing your JSON file(s) at `/data` inside the container a
 ```bash
 docker run --rm -v "$(pwd)/validator/examples:/data" dome-validator \
   --schema-type entry \
-  --schema-version v1.0.0 \
+  --schema-version v2.0.0 \
   --file /data/compliant-entry-v1.0.0.json
 ```
 
@@ -114,7 +130,7 @@ docker run --rm -v "$(pwd)/validator/examples:/data" dome-validator \
 ```bash
 docker run --rm -v "/path/to/your/files:/data" dome-validator \
   --schema-type user \
-  --schema-version v1.0.0 \
+  --schema-version v2.0.0 \
   --file /data/my-user.json
 ```
 
@@ -132,7 +148,7 @@ The validator prints a per-field report and a summary result:
 DOME Registry Validator
 ────────────────────────────────────────────────────
 Schema type   : entry
-Schema version: v1.0.0
+Schema version: v2.0.0
 File          : /data/compliant-entry-v1.0.0.json
 ────────────────────────────────────────────────────
 
