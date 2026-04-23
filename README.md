@@ -84,48 +84,6 @@ DOME Registry entries record which schema version they conform to. This ensures 
 
 ---
 
-## Community Contributions
-
-We actively welcome community input on the schema. Whether you want to propose a new field, report an inconsistency, or suggest how the schema better supports emerging AI/ML reporting needs (e.g., generative models, foundation models, or multi-modal datasets), we want to hear from you.
-
-- **Propose or discuss a schema change:** [Open an issue](https://github.com/BioComputingUP/dome-schema/issues)
-- **Submit a schema change or fix:** [Read the contributing guide](./CONTRIBUTING.md)
-- **Community standards:** [Code of Conduct](./CODE_OF_CONDUCT.md)
-
-All contributions are licensed under [CC BY 4.0](./LICENSE).
-
----
-
-## Publications
-
-- **DOME Recommendations** — Walsh I, et al. (2021). *DOME: recommendations for supervised machine learning validation in biology.* Nature Methods, 18, 1122–1127. [https://doi.org/10.1038/s41592-021-01205-4](https://doi.org/10.1038/s41592-021-01205-4)
-
-- **DOME Registry** — Attafi OA, Clementel D, Kyritsis K, Capriotti E, Farrell G, et al. (2024). *DOME Registry: implementing community-wide recommendations for reporting supervised machine learning in biology.* GigaScience, 13, giae094. [https://doi.org/10.1093/gigascience/giae094](https://doi.org/10.1093/gigascience/giae094)
-
-- **DOME Copilot** — Farrell G, Attafi OA, Fragkouli SC, Heredia I, et al. (2026). *DOME Copilot: Making transparency and reproducibility for artificial intelligence methods simple.* bioRxiv. [https://doi.org/10.64898/2026.04.16.718888](https://doi.org/10.64898/2026.04.16.718888)
-
----
-
-## Citation
-
-If you use or reference this schema, please cite the DOME Registry paper. Citation metadata is available in [CITATION.cff](./CITATION.cff).
-
-> Attafi OA, Clementel D, Kyritsis K, Capriotti E, Farrell G, et al. (2024). *DOME Registry: implementing community-wide recommendations for reporting supervised machine learning in biology.* GigaScience, 13, giae094. https://doi.org/10.1093/gigascience/giae094
-
----
-
-## Contact
-
-For questions, feedback, or general enquiries about the DOME schema, please contact us at [contact@dome-ml.org](mailto:contact@dome-ml.org) or [open an issue](https://github.com/BioComputingUP/dome-schema/issues).
-
----
-
-## Related Resources
-
-- DOME Registry application and codebase: [https://github.com/BioComputingUP/dome-registry](https://github.com/BioComputingUP/dome-registry)
-
----
-
 ## Validator
 
 This repository includes a command-line validator for checking DOME Registry JSON files (entries and user accounts) against a chosen schema version. The validator is packaged as a Docker image — this is the only supported runtime.
@@ -196,14 +154,56 @@ The process exits with code `0` (COMPLIANT) or `1` (NON-COMPLIANT), making it st
 
 Two example entry files are provided in [`validator/examples/`](./validator/examples/) for testing and reference:
 
-| File | Expected result | DOME score |
-|---|---|---|
-| `compliant-entry-v1.0.0.json` | COMPLIANT | 21/21 |
-| `non-compliant-entry-v1.0.0.json` | NON-COMPLIANT | 6/21 |
+| File | Expected result |
+|---|---|
+| `compliant-entry-v1.0.0.json` | COMPLIANT |
+| `non-compliant-entry-v1.0.0.json` | NON-COMPLIANT |
+
+---
+
+## Community Contributions
+
+We actively welcome community input on the schema. Whether you want to propose a new field, report an inconsistency, or suggest how the schema better supports emerging AI/ML reporting needs (e.g., generative models, foundation models, or multi-modal datasets), we want to hear from you.
+
+- **Propose or discuss a schema change:** [Open an issue](https://github.com/BioComputingUP/dome-schema/issues)
+- **Submit a schema change or fix:** [Read the contributing guide](./CONTRIBUTING.md)
+- **Community standards:** [Code of Conduct](./CODE_OF_CONDUCT.md)
+
+All contributions are licensed under [CC BY 4.0](./LICENSE).
+
+---
+
+## Publications
+
+- **DOME Recommendations** — Walsh I, et al. (2021). *DOME: recommendations for supervised machine learning validation in biology.* Nature Methods, 18, 1122–1127. [https://doi.org/10.1038/s41592-021-01205-4](https://doi.org/10.1038/s41592-021-01205-4)
+
+- **DOME Registry** — Attafi OA, Clementel D, Kyritsis K, Capriotti E, Farrell G, et al. (2024). *DOME Registry: implementing community-wide recommendations for reporting supervised machine learning in biology.* GigaScience, 13, giae094. [https://doi.org/10.1093/gigascience/giae094](https://doi.org/10.1093/gigascience/giae094)
+
+- **DOME Copilot** — Farrell G, Attafi OA, Fragkouli SC, Heredia I, et al. (2026). *DOME Copilot: Making transparency and reproducibility for artificial intelligence methods simple.* bioRxiv. [https://doi.org/10.64898/2026.04.16.718888](https://doi.org/10.64898/2026.04.16.718888)
+
+---
+
+## Citation
+
+If you use or reference this schema, please cite the DOME Registry paper. Citation metadata is available in [CITATION.cff](./CITATION.cff).
+
+> Attafi OA, Clementel D, Kyritsis K, Capriotti E, Farrell G, et al. (2024). *DOME Registry: implementing community-wide recommendations for reporting supervised machine learning in biology.* GigaScience, 13, giae094. https://doi.org/10.1093/gigascience/giae094
+
+---
+
+## Related Resources
+
+- DOME Registry application and codebase: [https://github.com/BioComputingUP/dome-registry](https://github.com/BioComputingUP/dome-registry)
 
 ---
 
 ## License
 
 This repository and its contents are licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](./LICENSE).
+
+---
+
+## Contact
+
+For questions, feedback, or general enquiries about the DOME schema, please contact us at [contact@dome-ml.org](mailto:contact@dome-ml.org) or [open an issue](https://github.com/BioComputingUP/dome-schema/issues).
 
