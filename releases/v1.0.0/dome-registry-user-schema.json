@@ -1,0 +1,59 @@
+{
+  "$id": "https://github.com/BioComputingUP/dome-schema/blob/main/releases/v1.0.0/dome-registry-user-schema.json",
+  "title": "DOME Registry User Schema",
+  "description": "JSON Schema document describing the structure of a DOME Registry user account record, as stored in the MongoDB database. User records are linked to DOME Registry entries via the 'user' field in each entry (referencing the user _id). This schema is descriptive of the current v1.0.0 data model; it is not a formal validation specification. All personal identifiable information (email, name, ORCID) is held server-side and is never exposed in public API responses or exports outside of authorised administrative contexts.",
+  "x-dome-schema-version": "1.0.0",
+  "type": "object",
+  "properties": {
+
+    "_id": {
+      "type": "object",
+      "description": "[SYSTEM] MongoDB document identifier. Generated server-side; uniquely identifies the user account. Referenced by the 'user' field in DOME Registry entry documents.",
+      "properties": {
+        "$oid": { "type": "string" }
+      }
+    },
+    "__v": {
+      "type": "integer",
+      "description": "[SYSTEM] MongoDB internal version key."
+    },
+
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "[PII] The user's email address. Used for authentication and account identification. Not exposed in public-facing API responses. Required for account creation."
+    },
+    "name": {
+      "type": "string",
+      "description": "[PII, Optional] The user's given name, if provided. Present for approximately 50% of accounts."
+    },
+    "surname": {
+      "type": "string",
+      "description": "[PII, Optional] The user's family name, if provided. Sparsely populated."
+    },
+    "orcid": {
+      "type": "string",
+      "description": "[Optional] The user's ORCID iD in 16-digit grouped format (e.g. '0000-0002-1825-0097'). Present for approximately 90% of accounts. Used to link Registry contributions to a persistent researcher identifier.",
+      "pattern": "^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+    },
+    "roles": {
+      "type": ["string", "null"],
+      "description": "The user's access role within the Registry. Controls which actions (view, edit, admin) the user can perform.",
+      "enum": ["user", "admin", null]
+    },
+    "organisation": {
+      "type": ["string", "null"],
+      "description": "[Legacy] Free-text organisation name field. Largely superseded by the 'organizations' array. Most existing records carry the value 'undefined' in this field.",
+      "examples": ["undefined", "academia", "GigaScience"]
+    },
+    "organizations": {
+      "type": "array",
+      "description": "Array of organisation or sector affiliations for the user. These are used for Registry analytics and user segmentation. Not a free-text field — values should match the controlled vocabulary used by the Registry.",
+      "items": {
+        "type": "string",
+        "enum": ["academia", "GigaScience", "GigaByte", "bioRxiv", "nothing"]
+      }
+    }
+  },
+  "required": ["email", "roles"]
+}

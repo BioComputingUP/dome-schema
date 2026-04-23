@@ -1,0 +1,52 @@
+{
+  "_comment": "DOME Registry entry template — v1.0.0. Fill all fields below. Fields marked [SYSTEM] are assigned by the Registry and should be omitted when submitting a new entry. The 21 user-facing DOME content fields carry [D1]–[D4], [O1]–[O8], [M1]–[M4], [E1]–[E5] labels in the annotated guide (dome-registry-entry-annotated.json).",
+  "x-dome-schema-version": "1.0.0",
+
+  "publication": {
+    "title": "",
+    "authors": "",
+    "journal": "",
+    "year": "",
+    "doi": "",
+    "pmid": "",
+    "pmcid": "",
+    "tags": []
+  },
+
+  "public": true,
+  "isAiGenerated": false,
+  "tags": [],
+
+  "dataset": {
+    "availability": "",
+    "provenance": "",
+    "redundancy": "",
+    "splits": ""
+  },
+
+  "optimization": {
+    "algorithm": "",
+    "features": "",
+    "encoding": "",
+    "config": "",
+    "parameters": "",
+    "fitting": "",
+    "regularization": "",
+    "meta": ""
+  },
+
+  "model": {
+    "availability": "",
+    "interpretability": "",
+    "output": "",
+    "duration": ""
+  },
+
+  "evaluation": {
+    "availability": "",
+    "measure": "",
+    "method": "",
+    "comparison": "",
+    "confidence": ""
+  }
+}

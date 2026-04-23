@@ -1,0 +1,12 @@
+{
+  "_comment": "DOME Registry user account annotated guide — v1.0.0. Each field value below is a descriptive prompt explaining what information to provide. This file is for documentation purposes only. Use dome-registry-user-template.json for blank submissions and dome-registry-user-example.json to see a filled example. Fields marked [SYSTEM] are assigned server-side and should be omitted from new account records. Fields marked [PII] contain personally identifiable information — handle in accordance with applicable data protection regulations (e.g. GDPR).",
+  "x-dome-schema-version": "1.0.0",
+
+  "email":        "[Required, PII] The user's email address. Used for login and account identification. Must be a valid email format. Not exposed in public-facing Registry views.",
+  "name":         "[Optional, PII] The user's given (first) name, if they choose to provide it. Used for display purposes within the Registry interface.",
+  "surname":      "[Optional, PII] The user's family name, if they choose to provide it.",
+  "orcid":        "[Optional] The user's ORCID iD in 16-digit grouped format: '0000-0002-1825-0097'. ORCID is a persistent digital identifier for researchers (see https://orcid.org). Providing an ORCID links Registry contributions to the researcher's scholarly record. The last character may be 'X' (Roman numeral ten).",
+  "roles":        "[Required] The user's access role in the Registry. Standard value is 'user'. The value 'admin' is assigned only by Registry maintainers and grants additional management capabilities. Must be one of: 'user', 'admin'.",
+  "organisation": "[Legacy, Optional] Free-text organisation name. This field is largely superseded by the 'organizations' array. New accounts should leave this as 'undefined' unless a specific value is needed for legacy compatibility.",
+  "organizations": "[Optional] Array of sector or organisation affiliations. Select all that apply from the controlled vocabulary used by the Registry. Current valid values: 'academia', 'GigaScience', 'GigaByte', 'bioRxiv', 'nothing'. This field is used for Registry analytics and user segmentation."
+}

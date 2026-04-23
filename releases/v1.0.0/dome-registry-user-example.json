@@ -1,0 +1,19 @@
+{
+  "_comment": "DOME Registry user account example — v1.0.0. This is a fictionalised example of a DOME Registry user account record. No real personal data is used. System fields (_id, __v) that are assigned server-side are shown here for illustrative completeness only; omit them when creating a new account. The _id shown here would be the value referenced in the 'user' field of any DOME Registry entry owned by this account.",
+  "x-dome-schema-version": "1.0.0",
+
+  "_id": {
+    "$oid": "000000000000000000000001"
+  },
+  "__v": 0,
+
+  "email": "a.researcher@example-institution.org",
+  "name": "Alex",
+  "surname": "Researcher",
+  "orcid": "0000-0002-1825-0097",
+  "roles": "user",
+  "organisation": "undefined",
+  "organizations": [
+    "academia"
+  ]
+}

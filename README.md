@@ -20,15 +20,44 @@ As the Registry has grown and evolved — with entries being added, updated, and
 dome-schema/
 ├── releases/
 │   └── v1.0.0/
-│       └── dome-registry-schema.json   # JSON Schema for DOME Registry entries
-├── CITATION.cff                        # Citation metadata
-├── CODE_OF_CONDUCT.md                  # Community code of conduct
-├── CONTRIBUTING.md                     # How to contribute
-├── LICENSE                             # CC BY 4.0
+│       ├── dome-registry-schema.json          # DOME entry schema — all 21 DOME content fields + metadata
+│       ├── dome-registry-entry-template.json  # Blank entry template — copy and fill for a new entry
+│       ├── dome-registry-entry-annotated.json # Annotated entry guide — field-by-field descriptions
+│       ├── dome-registry-entry-example.json   # Fictionalised fully-completed example entry
+│       ├── dome-registry-user-schema.json     # DOME user account schema — links to entries via _id
+│       ├── dome-registry-user-template.json   # Blank user account template
+│       ├── dome-registry-user-annotated.json  # Annotated user guide — field-by-field descriptions
+│       └── dome-registry-user-example.json    # Fictionalised user account example (no real PII)
+├── CITATION.cff                               # Citation metadata
+├── CODE_OF_CONDUCT.md                         # Community code of conduct
+├── CONTRIBUTING.md                            # How to contribute
+├── LICENSE                                    # CC BY 4.0
 └── README.md
 ```
 
-Each version folder under `releases/` contains the full JSON Schema for that version. Released versions are **immutable** — they are never edited after publication.
+Each version folder under `releases/` is **immutable** after publication. There are two parallel schema families per version:
+
+### Entry schema — `dome-registry-*`
+
+Describes the structure of a DOME Registry entry: the 21 user-facing DOME content fields across Data, Optimisation, Model, and Evaluation, plus publication metadata and system fields. Entries are linked to user accounts via the `user` field (referencing the user `_id`).
+
+| File | Purpose |
+|---|---|
+| `dome-registry-schema.json` | Schema document defining all entry field types, descriptions, and constraints |
+| `dome-registry-entry-template.json` | Blank template with all 21 DOME content fields empty — copy and fill to create a new entry |
+| `dome-registry-entry-annotated.json` | Each field value replaced with a descriptive prompt explaining what information to provide |
+| `dome-registry-entry-example.json` | Fully completed fictionalised example entry showing expected level of detail |
+
+### User schema — `dome-registry-user-*`
+
+Describes the structure of a DOME Registry user account: authentication, identity, ORCID, role, and organisation affiliation. Personal data fields are clearly labelled `[PII]`. User records link to entries through the shared `_id` → `user.$oid` reference.
+
+| File | Purpose |
+|---|---|
+| `dome-registry-user-schema.json` | Schema document defining all user account field types, descriptions, and constraints |
+| `dome-registry-user-template.json` | Blank user account template |
+| `dome-registry-user-annotated.json` | Each field value replaced with a descriptive prompt; PII fields clearly noted |
+| `dome-registry-user-example.json` | Fictionalised example user account — no real personal data |
 
 ---
 

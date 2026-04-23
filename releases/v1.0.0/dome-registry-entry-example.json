@@ -1,0 +1,56 @@
+{
+  "_comment": "DOME Registry example entry — v1.0.0. This is a fictionalised but realistic example of a fully completed DOME Registry entry for a supervised machine learning method in biology. No real personal data or user account information is included. System fields (_id, user, uuid, shortid, __v, score, update, reviewState, created, updated) that are assigned server-side are shown here for illustrative completeness only; omit them when submitting a new entry.",
+  "x-dome-schema-version": "1.0.0",
+
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "shortid": "ex4mpl3abc",
+  "public": true,
+  "isAiGenerated": false,
+  "tags": ["protein", "post-translational modification", "sequence-based"],
+  "score": 21,
+  "reviewState": "approved",
+
+  "publication": {
+    "title": "BindPredict: a random forest model for predicting protein–ligand binding residues from sequence features.",
+    "authors": "Example A, Demonstration B, Fictitious C.",
+    "journal": "Bioinformatics",
+    "year": "2023",
+    "doi": "10.1093/bioinformatics/example000",
+    "pmid": "00000000",
+    "pmcid": "PMC0000000",
+    "tags": ["binding site prediction", "sequence features"]
+  },
+
+  "dataset": {
+    "availability": "Yes. Training and test datasets are available in the GitHub repository at https://github.com/example-org/bindpredict/data/.",
+    "provenance": "Protein–ligand binding residue annotations were extracted from the BioLiP database (version 2023-01). Proteins with experimentally resolved binding sites were retained. The final dataset contains 3,842 positive (binding) residue instances and 38,120 negative (non-binding) instances across 512 non-redundant proteins. A similar benchmark was used by Smith et al. (PMID: 12345678).",
+    "redundancy": "Sequence redundancy was reduced using cd-hit at a 30% pairwise identity threshold. Proteins with >30% identity to any entry in the test set were removed from training to prevent data leakage.",
+    "splits": "Data were split into training (70%), validation (10%), and independent test (20%) sets by stratified random sampling, maintaining a consistent positive-to-negative ratio of 1:10. The class imbalance was addressed by applying class weights inversely proportional to class frequency during training."
+  },
+
+  "optimization": {
+    "algorithm": "Random Forest classifier (scikit-learn 1.2.2). An ensemble of 500 decision trees was trained using bagging with bootstrap sampling and random feature subsets at each split.",
+    "features": "Each residue was represented by a 66-dimensional feature vector: 20-dimensional amino acid composition in a sliding window of ±5 residues, PSSM scores from PSI-BLAST (3 iterations against UniRef90), and 6 physicochemical descriptors (hydrophobicity, charge, molecular weight, polarity, aromaticity, secondary structure propensity). Feature importance was assessed via Gini impurity.",
+    "encoding": "The sequence window of 11 residues centred on the target residue was encoded using position-specific scoring matrix (PSSM) values (20 aa × 11 positions = 220 values) concatenated with mean physicochemical property values for the window.",
+    "config": "Yes. Key hyperparameters: n_estimators=500, max_features='sqrt', max_depth=None, min_samples_split=2, class_weight='balanced'. Hyperparameters were selected by 5-fold cross-validation grid search on the training set.",
+    "parameters": "The Random Forest model has no conventional 'parameters' in the neural network sense; the number of decision nodes across all 500 trees was approximately 2.1 million. Feature importance scores are reported in Supplementary Table S2.",
+    "fitting": "Training AUROC was 0.97; independent test AUROC was 0.83. The gap is consistent with Random Forest behaviour on imbalanced data and is not considered evidence of problematic overfitting. The authors discuss this disparity in Section 3.4.",
+    "regularization": "No explicit regularization was applied. Overfitting was mitigated through bootstrap aggregation (bagging) and limiting feature subsets at each node split (max_features='sqrt').",
+    "meta": "No. A single Random Forest model was used without stacking or boosting."
+  },
+
+  "model": {
+    "availability": "Yes. Trained model weights (pickle format), inference code, and a Docker container for reproducing all results are available at https://github.com/example-org/bindpredict/.",
+    "interpretability": "Partially transparent. Feature importance scores derived from mean decrease in Gini impurity are reported for all 66 features (Supplementary Table S2), identifying PSSM conservation scores and hydrophobicity as the most predictive features. No post-hoc explanation method (e.g. SHAP) was applied.",
+    "output": "Binary classification per residue: binding (1) or non-binding (0), with an associated probability score in [0, 1].",
+    "duration": "Training time: approximately 12 minutes on a single Intel Xeon E5-2680 CPU core (no GPU required). Inference on a 300-residue protein takes <1 second."
+  },
+
+  "evaluation": {
+    "availability": "Yes. All evaluation scripts and result files are provided in the GitHub repository at https://github.com/example-org/bindpredict/evaluation/.",
+    "measure": "AUROC, MCC, precision, recall, and F1-score. MCC was chosen as the primary metric because it is robust to class imbalance (positive:negative ratio 1:10). AUROC is reported for comparability with prior work.",
+    "method": "5-fold stratified cross-validation on the training set for model selection and hyperparameter tuning. Final performance was assessed on a fully held-out independent test set (20% of total data) not used during any stage of training or tuning.",
+    "comparison": "BindPredict was compared to three prior methods: BindN+ (PMID: 19435893), SitePredict (PMID: 17108970), and a naive majority-class baseline. BindPredict achieved a test MCC of 0.48, outperforming BindN+ (MCC=0.41) and SitePredict (MCC=0.38) on the same test set.",
+    "confidence": "Mean and standard deviation of AUROC and MCC across 5 cross-validation folds are reported (Table 2). A paired Wilcoxon signed-rank test confirmed statistically significant improvement over BindN+ (p=0.018) and SitePredict (p=0.031) at the 0.05 significance level."
+  }
+}

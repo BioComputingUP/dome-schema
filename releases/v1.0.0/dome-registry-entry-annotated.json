@@ -1,0 +1,56 @@
+{
+  "_comment": "DOME Registry annotated guide — v1.0.0. This file documents what each field should contain. Field values here are descriptive prompts, NOT example data. Use dome-registry-entry-template.json to create a blank submission, and dome-registry-entry-example.json to see a filled example. Fields marked [SYSTEM] are assigned server-side and should be omitted from new submissions.",
+  "x-dome-schema-version": "1.0.0",
+
+  "publication": {
+    "title":   "[Required] Full title of the publication exactly as it appears in the journal or preprint.",
+    "authors": "[Required] Author list as a single string, e.g. 'Smith A, Jones B, Müller C.'",
+    "journal": "[Required] Name of the journal, conference, or preprint server.",
+    "year":    "[Required] Four-digit publication year, e.g. '2024'.",
+    "doi":     "[Recommended] DOI without the 'https://doi.org/' prefix, e.g. '10.1038/s41592-021-01205-4'.",
+    "pmid":    "[Optional] PubMed identifier, if indexed, e.g. '34289O22'.",
+    "pmcid":   "[Optional] PubMed Central identifier, if available, e.g. 'PMC8513558'.",
+    "tags":    "[Optional] Array of free-text tags for the publication, e.g. ['protein', 'cancer', 'NLP']."
+  },
+
+  "public":        "[Required] Boolean. Set to true to make this entry visible in the public DOME Registry.",
+  "isAiGenerated": "[Required] Boolean. Set to true if this entry was generated automatically (e.g. by DOME Copilot); false if completed by a human annotator.",
+  "tags":          "[Optional] Array of free-text tags for the entry as a whole.",
+
+  "dataset": {
+    "_section": "D — Data (4 fields, D1–D4). Describe the datasets used to train and test the method.",
+    "availability": "[D1] State whether the dataset is publicly available. If yes, provide a direct URL or access instructions. If no, state the reason (e.g. patient privacy). Example values: 'Yes, available at https://...', 'No, restricted access due to patient data.'",
+    "provenance":   "[D2] Describe the origin of the dataset: which database(s) or study it came from, the total number of samples, how positive and negative classes are defined, and whether the dataset has been used in prior published work. State the version or date of the source database where known.",
+    "redundancy":   "[D3] Describe how sequence, structural, or other redundancy in the dataset was detected and handled (e.g. cd-hit at 30% identity, BLAST E-value threshold). If redundancy was not addressed, state 'Not reported'.",
+    "splits":       "[D4] Describe the data partitioning strategy: how training, validation, and test sets were defined; their relative sizes; whether splits are stratified by class; and any balancing technique applied (e.g. oversampling, undersampling, class weights)."
+  },
+
+  "optimization": {
+    "_section": "O — Optimisation (8 fields, O1–O8). Describe the training procedure, features, and hyperparameter tuning.",
+    "algorithm":      "[O1] State the name and type of the ML algorithm(s) used (e.g. 'Support Vector Machine with RBF kernel', 'Random Forest', 'LSTM neural network'). Provide a brief characterisation if the method is novel.",
+    "features":       "[O2] Describe the input features: their type (e.g. sequence-based, structural, physicochemical), total dimensionality, and how they were selected or derived. Note any feature selection or dimensionality reduction applied.",
+    "encoding":       "[O3] Describe how raw input data (e.g. amino acid sequence, graph, image) were encoded as numerical vectors for input to the model (e.g. one-hot encoding, embeddings, PSSM, graph adjacency matrix).",
+    "config":         "[O4] State whether the final hyperparameter configuration is reported in the paper. If yes, list the key hyperparameters and their optimal values. If no, state 'Not reported'.",
+    "parameters":     "[O5] Report the number of free or learnable parameters in the model, or key hyperparameter values. State 'Not reported' if this information is not given in the paper.",
+    "fitting":        "[O6] Assess potential overfitting: compare training and test/validation performance and comment on whether overfitting was checked or ruled out. Flag if training performance substantially exceeds test performance without explanation.",
+    "regularization": "[O7] State whether any regularization technique was applied (e.g. L1, L2, dropout, early stopping, data augmentation) and describe the settings. If none, state 'No'. If not mentioned, state 'Not reported'.",
+    "meta":           "[O8] State whether a meta-learning or ensemble approach was used (e.g. bagging, boosting, stacking). If yes, describe it briefly. If no, state 'No'."
+  },
+
+  "model": {
+    "_section": "M — Model (4 fields, M1–M4). Describe the model and its availability.",
+    "availability":     "[M1] State whether the trained model, code, or a web service is publicly available. If yes, provide the URL. If no, state the reason (e.g. proprietary). Note if only code without trained weights is provided.",
+    "interpretability": "[M2] Characterise the interpretability of the model: 'transparent' (e.g. decision tree, linear model with reported coefficients), 'black box' (e.g. deep neural network without explanation), or 'post-hoc explainable' (e.g. SHAP, attention, saliency maps applied). Describe any explanation approach used.",
+    "output":           "[M3] Describe the model output type and format (e.g. 'binary classification: active/inactive', 'regression: binding affinity score in kcal/mol', 'multi-class probability distribution over 8 secondary structure states').",
+    "duration":         "[M4] Report computational cost information: training duration, hardware used (CPU/GPU, memory), or estimated inference time. State 'Not reported' if not given in the paper."
+  },
+
+  "evaluation": {
+    "_section": "E — Evaluation (5 fields, E1–E5). Describe how model performance was assessed.",
+    "availability": "[E1] State whether evaluation results or code to reproduce them are publicly available. Provide a URL if yes. If no, state the reason.",
+    "measure":      "[E2] List all performance metrics reported (e.g. AUROC, MCC, F1-score, accuracy, precision, recall). Justify metric choice where relevant, especially for imbalanced or multi-class tasks.",
+    "method":       "[E3] Describe the evaluation protocol: the type of cross-validation (e.g. 5-fold, leave-one-out), use of an independent held-out test set, or any other validation strategy applied.",
+    "comparison":   "[E4] State whether the method is compared to any baseline or prior state-of-the-art approaches. List the compared methods and summarise the result (e.g. proposed method outperforms, comparable to, or underperforms).",
+    "confidence":   "[E5] State whether statistical confidence is reported: confidence intervals, p-values, standard deviations across folds, or other uncertainty estimates. If none, state 'Not reported'."
+  }
+}
