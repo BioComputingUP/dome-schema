@@ -42,7 +42,7 @@ This repository follows [Semantic Versioning (SemVer)](https://semver.org/) usin
 | **MINOR** `v1.x.0` | New optional fields added in a backward-compatible way |
 | **MAJOR** `vX.0.0` | Breaking changes: renaming/removing fields, changing types, restructuring sections |
 
-The current stable release is **[v1.0.0](./releases/v1.0.0/dome-registry-schema.json)**.
+The current stable release is **[v1.0.0](https://github.com/BioComputingUP/dome-schema/blob/main/releases/v1.0.0/dome-registry-schema.json)**.
 
 DOME Registry entries record which schema version they conform to. This ensures that even as the schema evolves, older entries remain valid and tools targeting a specific version remain stable — including those produced at scale by automated pipelines such as [DOME Copilot](https://doi.org/10.64898/2026.04.16.718888).
 
@@ -75,6 +75,12 @@ All contributions are licensed under [CC BY 4.0](./LICENSE).
 If you use or reference this schema, please cite the DOME Registry paper. Citation metadata is available in [CITATION.cff](./CITATION.cff).
 
 > Attafi OA, Clementel D, Kyritsis K, Capriotti E, Farrell G, et al. (2024). *DOME Registry: implementing community-wide recommendations for reporting supervised machine learning in biology.* GigaScience, 13, giae094. https://doi.org/10.1093/gigascience/giae094
+
+---
+
+## Contact
+
+For questions, feedback, or general enquiries about the DOME schema, please contact us at [contact@dome-ml.org](mailto:contact@dome-ml.org) or [open an issue](https://github.com/BioComputingUP/dome-schema/issues).
 
 ---
 

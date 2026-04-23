@@ -45,7 +45,7 @@ Examples of unacceptable behaviour include:
 
 ## Reporting Violations
 
-Instances of abusive, harassing, or otherwise unacceptable behaviour may be reported by contacting the project team at **gavimichael.farrell@studenti.unipd.it**. All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.
+Instances of abusive, harassing, or otherwise unacceptable behaviour may be reported by contacting the project team at [contact@dome-ml.org](mailto:contact@dome-ml.org) or **gavimichael.farrell@studenti.unipd.it**. All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.
 
 ---
 
