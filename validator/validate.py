@@ -40,25 +40,85 @@ except ImportError:
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RELEASES_DIR = REPO_ROOT / "releases"
 
-# The 21 DOME content fields, grouped by section.
-# These are the user-facing fields for which completeness is tracked (score 0–21).
-DOME_CONTENT_FIELDS = {
-    "dataset":      ["availability", "provenance", "redundancy", "splits"],
-    "optimization": ["algorithm", "features", "encoding", "config",
-                     "parameters", "fitting", "regularization", "meta"],
-    "model":        ["availability", "interpretability", "output", "duration"],
-    "evaluation":   ["availability", "measure", "method", "comparison", "confidence"],
+# Top-level schema properties that are infrastructure/metadata, NOT DOME content sections.
+NON_DOME_TOP_LEVEL = {
+    "publication", "_id", "uuid", "shortid", "__v", "update",
+    "score", "reviewState", "public", "isAiGenerated", "tags",
+    "created", "updated", "user",
 }
 
-# Publication fields shown in the report (not counted in the 21-field score).
-PUBLICATION_FIELDS = ["title", "authors", "journal", "year", "doi", "pmid", "pmcid"]
+# Sub-fields present in every DOME section for system tracking — not content fields.
+SECTION_SYSTEM_FIELDS = {"done", "skip"}
 
-USER_FIELDS = ["email", "name", "surname", "orcid", "roles", "organizations"]
-# Fields that are legacy/deprecated — shown in output but not counted as completeness failures.
-USER_LEGACY_FIELDS = {"organisation"}
+# Publication sub-fields that are system/tracking, not user-facing content.
+PUBLICATION_SYSTEM_FIELDS = {"done", "skip", "updated", "created"}
 
 # Keys in our schema files that are not part of JSON Schema proper — strip before validating.
 NON_STANDARD_SCHEMA_KEYS = {"x-dome-schema-version", "_comment"}
+
+
+# ---------------------------------------------------------------------------
+# Schema-driven field discovery
+# These functions derive section/field structure directly from the schema JSON
+# at runtime, so no code changes are needed when a new schema version is added.
+# ---------------------------------------------------------------------------
+
+def extract_dome_sections(schema: dict) -> dict:
+    """
+    Return an ordered {section_name: [field_name, ...]} map derived from the
+    schema JSON itself.  Works for any schema version that follows the DOME
+    convention:
+      - Top-level `required` lists the DOME content sections (plus 'publication').
+      - Each section has `properties` whose keys are the DOME content fields
+        plus the system tracking fields `done` and `skip`.
+    """
+    top_props = schema.get("properties", {})
+    # Prefer canonical order from `required`; fall back to properties key order.
+    ordered_keys = schema.get("required", list(top_props.keys()))
+    sections = [k for k in ordered_keys if k not in NON_DOME_TOP_LEVEL]
+    result = {}
+    for section in sections:
+        sec_props = top_props.get(section, {}).get("properties", {})
+        fields = [
+            f for f in sec_props
+            if f not in SECTION_SYSTEM_FIELDS and not f.startswith("_")
+        ]
+        result[section] = fields
+    return result
+
+
+def extract_publication_fields(schema: dict) -> list:
+    """Derive the user-facing publication fields from the schema, in schema order."""
+    pub_props = (
+        schema.get("properties", {})
+              .get("publication", {})
+              .get("properties", {})
+    )
+    return [
+        f for f in pub_props
+        if f not in PUBLICATION_SYSTEM_FIELDS and not f.startswith("_")
+    ]
+
+
+def extract_user_fields(schema: dict) -> tuple:
+    """
+    Derive (active_fields, legacy_field_set) from the user schema properties.
+    A field is legacy if its description contains '[Legacy]' or '[legacy]'.
+    System fields (_id, __v) are excluded entirely.
+    Returns a tuple: (list_of_active_fields, set_of_legacy_fields).
+    """
+    system = {"_id", "__v"}
+    props = schema.get("properties", {})
+    active, legacy = [], set()
+    for field, fschema in props.items():
+        if field in system or field.startswith("_"):
+            continue
+        desc = fschema.get("description", "")
+        if "[Legacy]" in desc or "[legacy]" in desc:
+            legacy.add(field)
+        else:
+            active.append(field)
+    return active, legacy
 
 
 # ---------------------------------------------------------------------------
@@ -125,12 +185,21 @@ def run_structural_validation(schema: dict, instance: dict) -> list:
 def is_filled(value) -> bool:
     if value is None:
         return False
+    if isinstance(value, bool):
+        return True  # explicit boolean is always considered filled
     if isinstance(value, str):
         return value.strip() not in ("", "undefined")
-    if isinstance(value, (list, dict)):
+    if isinstance(value, list):
         return len(value) > 0
-    if isinstance(value, bool):
-        return True  # explicit boolean is considered filled
+    if isinstance(value, dict):
+        # For v2.0.0 structured sub-field objects: filled if at least one
+        # non-underscore-prefixed sub-field has a non-null, non-empty value.
+        for k, v in value.items():
+            if k.startswith("_"):
+                continue
+            if is_filled(v):
+                return True
+        return False
     return True
 
 
@@ -138,7 +207,8 @@ def is_filled(value) -> bool:
 # Report printers
 # ---------------------------------------------------------------------------
 
-def report_entry(instance: dict, structural_errors: list, file_label: str, version: str):
+def report_entry(instance: dict, structural_errors: list, file_label: str,
+                 version: str, schema: dict):
     error_paths = {".".join(str(p) for p in e.path): e.message for e in structural_errors}
 
     print()
@@ -151,7 +221,11 @@ def report_entry(instance: dict, structural_errors: list, file_label: str, versi
 
     completeness_issues = []
 
-    for section, fields in DOME_CONTENT_FIELDS.items():
+    # Derive sections and fields directly from the schema — no hardcoded maps.
+    dome_sections = extract_dome_sections(schema)
+    pub_fields = extract_publication_fields(schema)
+
+    for section, fields in dome_sections.items():
         print(f"\nSection: {Fore.CYAN if HAS_COLOR else ''}{section}{Style.RESET_ALL if HAS_COLOR else ''}")
         section_data = instance.get(section, {})
         if not isinstance(section_data, dict):
@@ -172,13 +246,13 @@ def report_entry(instance: dict, structural_errors: list, file_label: str, versi
             else:
                 print(ok(field))
 
-    # Publication section
+    # Publication section — derived from schema, not hardcoded.
     print(f"\nSection: {Fore.CYAN if HAS_COLOR else ''}publication{Style.RESET_ALL if HAS_COLOR else ''}")
     pub = instance.get("publication", {})
     if not isinstance(pub, dict):
         print(fail("'publication' is present but not an object"))
     else:
-        for field in PUBLICATION_FIELDS:
+        for field in pub_fields:
             value = pub.get(field)
             path_key = f"publication.{field}"
             if path_key in error_paths:
@@ -189,11 +263,6 @@ def report_entry(instance: dict, structural_errors: list, file_label: str, versi
                 print(warn(f"{field} — present but empty"))
             else:
                 print(ok(field))
-
-    # Any remaining structural errors not already shown
-    top_level_errors = [e for e in structural_errors
-                        if not any(str(p) in DOME_CONTENT_FIELDS or str(p) == "publication"
-                                   for p in e.path)]
 
     print()
     print(separator())
@@ -218,7 +287,8 @@ def report_entry(instance: dict, structural_errors: list, file_label: str, versi
     return 0 if (n_structural == 0 and not incomplete) else 1
 
 
-def report_user(instance: dict, structural_errors: list, file_label: str, version: str):
+def report_user(instance: dict, structural_errors: list, file_label: str,
+                version: str, schema: dict):
     error_paths = {".".join(str(p) for p in e.path): e.message for e in structural_errors}
 
     print()
@@ -232,17 +302,21 @@ def report_user(instance: dict, structural_errors: list, file_label: str, versio
     print(f"\nUser account fields:")
     completeness_issues = []
 
-    all_report_fields = USER_FIELDS + sorted(USER_LEGACY_FIELDS)
+    # Derive user fields and legacy set from the schema — no hardcoded lists.
+    user_fields, user_legacy = extract_user_fields(schema)
+    schema_required = set(schema.get("required", []))
+    all_report_fields = user_fields + sorted(user_legacy)
+
     for field in all_report_fields:
         path_key = field
         value = instance.get(field)
-        is_legacy = field in USER_LEGACY_FIELDS
+        is_legacy = field in user_legacy
         if path_key in error_paths:
             print(fail(f"{field} — schema error: {error_paths[path_key]}"))
             if not is_legacy:
                 completeness_issues.append(field)
         elif value is None:
-            if field in ("email", "roles"):
+            if field in schema_required:
                 print(fail(f"{field} — required field absent"))
                 completeness_issues.append(field)
             elif is_legacy:
@@ -356,9 +430,9 @@ def main():
     structural_errors = run_structural_validation(schema, instance)
 
     if args.schema_type == "entry":
-        exit_code = report_entry(instance, structural_errors, args.file, args.schema_version)
+        exit_code = report_entry(instance, structural_errors, args.file, args.schema_version, schema)
     else:
-        exit_code = report_user(instance, structural_errors, args.file, args.schema_version)
+        exit_code = report_user(instance, structural_errors, args.file, args.schema_version, schema)
 
     sys.exit(exit_code)
 

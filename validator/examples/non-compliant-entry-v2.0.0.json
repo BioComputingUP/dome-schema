@@ -1,0 +1,118 @@
+{
+  "uuid": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+  "shortid": "nc0mpl1ant",
+  "public": true,
+  "isAiGenerated": false,
+  "tags": ["protein", "sequence-based"],
+
+  "publication": {
+    "title": "IncompleteNet: a model with missing DOME documentation.",
+    "authors": "Missing A, Incomplete B.",
+    "journal": "Bioinformatics",
+    "year": "2023",
+    "doi": "10.1093/bioinformatics/incomplete000"
+  },
+
+  "data": {
+    "availability": {
+      "isPub": true,
+      "licence": "",
+      "enfMeth": ""
+    },
+    "provenance": {
+      "source": "",
+      "numDP": null,
+      "prevUse": null
+    },
+    "redundancy": {
+      "splitMeth": "",
+      "isIndep": null,
+      "enfMeth": "",
+      "distCmp": ""
+    },
+    "splits": {
+      "numSplits": null,
+      "dpPerSplit": [],
+      "otherSplits": "",
+      "splitDist": "Random 80/20 split"
+    }
+  },
+
+  "optimization": {
+    "algorithm": {
+      "algName": "Neural network",
+      "isNewAlg": false,
+      "unpubRsn": ""
+    },
+    "config": {
+      "cfgAvail": null,
+      "lic": ""
+    },
+    "encoding": {
+      "encMeth": ""
+    },
+    "features": {
+      "numF": null,
+      "featSel": null,
+      "trnOnlySel": null
+    },
+    "fit": {
+      "pGtN": null,
+      "noOverFit": "",
+      "noUnderFit": ""
+    },
+    "meta": {
+      "isMeta": null,
+      "metaMeths": [],
+      "metaIndep": null
+    },
+    "parameters": {
+      "numP": null,
+      "pSelMeth": ""
+    },
+    "regularisation": {
+      "hasReg": null,
+      "regTechs": []
+    }
+  },
+
+  "model": {
+    "availability": {
+      "srcAvail": null,
+      "exeAvail": null,
+      "lic": ""
+    },
+    "duration": {
+      "runTime": ""
+    },
+    "interpretability": {
+      "interpType": "",
+      "transpEx": ""
+    },
+    "output": {
+      "outType": "Binary classification"
+    }
+  },
+
+  "evaluation": {
+    "method": {
+      "evalMeth": ""
+    },
+    "availability": {
+      "rawAvail": null,
+      "lic": ""
+    },
+    "comparison": {
+      "cmpPub": null,
+      "cmpBase": null
+    },
+    "confidance": {
+      "hasCI": null,
+      "isStatSig": null
+    },
+    "measure": {
+      "metrics": ["AUROC"],
+      "isRep": null
+    }
+  }
+}

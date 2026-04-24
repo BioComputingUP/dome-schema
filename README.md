@@ -42,8 +42,10 @@ dome-schema/
 │   ├── requirements.txt                       # Python dependencies (used by Dockerfile)
 │   ├── validate.py                            # Validator script — run via Docker, not directly
 │   └── examples/
-│       ├── compliant-entry-v1.0.0.json        # Fully completed entry — validates as COMPLIANT (21/21)
-│       └── non-compliant-entry-v1.0.0.json    # Incomplete entry — validates as NON-COMPLIANT (6/21)
+│       ├── compliant-entry-v2.0.0.json        # Fully completed v2.0.0 entry — validates as COMPLIANT (21/21)
+│       ├── non-compliant-entry-v2.0.0.json    # Incomplete v2.0.0 entry — validates as NON-COMPLIANT
+│       ├── compliant-entry-v1.0.0.json        # Fully completed v1.0.0 entry — validates as COMPLIANT (21/21)
+│       └── non-compliant-entry-v1.0.0.json    # Incomplete v1.0.0 entry — validates as NON-COMPLIANT (6/21)
 ├── CITATION.cff                               # Citation metadata
 ├── CODE_OF_CONDUCT.md                         # Community code of conduct
 ├── CONTRIBUTING.md                            # How to contribute
@@ -122,6 +124,15 @@ Mount a directory containing your JSON file(s) at `/data` inside the container a
 docker run --rm -v "$(pwd)/validator/examples:/data" dome-validator \
   --schema-type entry \
   --schema-version v2.0.0 \
+  --file /data/compliant-entry-v2.0.0.json
+```
+
+To validate against the v1.0.0 schema, pass `--schema-version v1.0.0` and supply a v1.0.0-format file:
+
+```bash
+docker run --rm -v "$(pwd)/validator/examples:/data" dome-validator \
+  --schema-type entry \
+  --schema-version v1.0.0 \
   --file /data/compliant-entry-v1.0.0.json
 ```
 
@@ -149,12 +160,17 @@ DOME Registry Validator
 ────────────────────────────────────────────────────
 Schema type   : entry
 Schema version: v2.0.0
-File          : /data/compliant-entry-v1.0.0.json
+File          : /data/compliant-entry-v2.0.0.json
 ────────────────────────────────────────────────────
 
-Section: dataset
+Section: data
   [✓] availability
   [✓] provenance
+  [✓] redundancy
+  [✓] splits
+
+Section: optimization
+  [✓] algorithm
   ...
 
 ────────────────────────────────────────────────────
@@ -168,12 +184,14 @@ The process exits with code `0` (COMPLIANT) or `1` (NON-COMPLIANT), making it st
 
 ### Example files
 
-Two example entry files are provided in [`validator/examples/`](./validator/examples/) for testing and reference:
+Example entry files for both schema versions are provided in [`validator/examples/`](./validator/examples/) for testing and reference:
 
-| File | Expected result |
-|---|---|
-| `compliant-entry-v1.0.0.json` | COMPLIANT |
-| `non-compliant-entry-v1.0.0.json` | NON-COMPLIANT |
+| File | Schema version | Expected result |
+|---|---|---|
+| `compliant-entry-v2.0.0.json` | v2.0.0 | COMPLIANT |
+| `non-compliant-entry-v2.0.0.json` | v2.0.0 | NON-COMPLIANT |
+| `compliant-entry-v1.0.0.json` | v1.0.0 | COMPLIANT |
+| `non-compliant-entry-v1.0.0.json` | v1.0.0 | NON-COMPLIANT |
 
 ---
 

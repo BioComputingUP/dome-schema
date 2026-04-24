@@ -1,0 +1,123 @@
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "shortid": "ex4mpl3abc",
+  "public": true,
+  "isAiGenerated": false,
+  "tags": ["protein", "post-translational modification", "sequence-based"],
+  "score": 21,
+  "reviewState": "approved",
+
+  "publication": {
+    "title": "BindPredict: a random forest model for predicting protein–ligand binding residues from sequence features.",
+    "authors": "Example A, Demonstration B, Fictitious C.",
+    "journal": "Bioinformatics",
+    "year": "2023",
+    "doi": "10.1093/bioinformatics/example000",
+    "pmid": "00000000",
+    "pmcid": "PMC0000000",
+    "tags": ["binding site prediction", "sequence features"]
+  },
+
+  "data": {
+    "availability": {
+      "isPub": true,
+      "licence": "CC BY 4.0",
+      "enfMeth": "https://github.com/example-org/bindpredict/data/"
+    },
+    "provenance": {
+      "source": "BioLiP database (version 2023-01)",
+      "numDP": 41962,
+      "prevUse": true
+    },
+    "redundancy": {
+      "splitMeth": "cd-hit",
+      "isIndep": true,
+      "enfMeth": "30% pairwise sequence identity threshold",
+      "distCmp": "pairwise sequence identity"
+    },
+    "splits": {
+      "numSplits": 3,
+      "dpPerSplit": [29374, 4196, 8392],
+      "otherSplits": "Inner 5-fold CV loop on training split for hyperparameter selection",
+      "splitDist": "Stratified random sampling maintaining 1:10 positive-to-negative class ratio"
+    }
+  },
+
+  "optimization": {
+    "algorithm": {
+      "algName": "Random Forest classifier (scikit-learn 1.2.2)",
+      "isNewAlg": false,
+      "unpubRsn": ""
+    },
+    "config": {
+      "cfgAvail": true,
+      "lic": "MIT"
+    },
+    "encoding": {
+      "encMeth": "Position-specific scoring matrix (PSSM) from PSI-BLAST (3 iterations against UniRef90); 20 aa × 11-residue window = 220 PSSM values concatenated with 6 mean physicochemical property values for the window"
+    },
+    "features": {
+      "numF": 66,
+      "featSel": false,
+      "trnOnlySel": null
+    },
+    "fit": {
+      "pGtN": false,
+      "noOverFit": "Training AUROC 0.97 vs independent test AUROC 0.83; gap consistent with Random Forest behaviour on imbalanced data and discussed in Section 3.4",
+      "noUnderFit": "Training AUROC of 0.97 is sufficiently high to rule out underfitting"
+    },
+    "meta": {
+      "isMeta": true,
+      "metaMeths": ["bagging"],
+      "metaIndep": true
+    },
+    "parameters": {
+      "numP": 2100000,
+      "pSelMeth": "5-fold cross-validation grid search on training set; key settings: n_estimators=500, max_features='sqrt', max_depth=None, min_samples_split=2, class_weight='balanced'"
+    },
+    "regularisation": {
+      "hasReg": false,
+      "regTechs": []
+    }
+  },
+
+  "model": {
+    "availability": {
+      "srcAvail": true,
+      "exeAvail": true,
+      "lic": "MIT"
+    },
+    "duration": {
+      "runTime": "Approximately 12 minutes on a single Intel Xeon E5-2680 CPU core (no GPU required); inference on a 300-residue protein takes <1 second"
+    },
+    "interpretability": {
+      "interpType": "post-hoc explainable",
+      "transpEx": "Gini impurity-based feature importance scores reported for all 66 features (Supplementary Table S2); PSSM conservation scores and hydrophobicity identified as the most predictive features"
+    },
+    "output": {
+      "outType": "Binary classification per residue: binding (1) or non-binding (0), with an associated probability score in [0, 1]"
+    }
+  },
+
+  "evaluation": {
+    "method": {
+      "evalMeth": "5-fold stratified cross-validation on the training set for model selection; final performance assessed on a fully held-out independent test set (20% of total data)"
+    },
+    "availability": {
+      "rawAvail": true,
+      "lic": "MIT"
+    },
+    "comparison": {
+      "cmpPub": true,
+      "cmpBase": true
+    },
+    "confidance": {
+      "hasCI": true,
+      "isStatSig": true
+    },
+    "measure": {
+      "metrics": ["AUROC", "MCC", "precision", "recall", "F1"],
+      "isRep": true
+    }
+  }
+}
